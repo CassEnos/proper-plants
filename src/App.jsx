@@ -1,13 +1,14 @@
 import { useState } from "react";
-import "./App.css";
-import PlantList from "./components/PlantList";
-import Cart from "./components/Cart";
+import PLANTS from "./data";
+import Cart from "./cart/Cart";
+import Plants from "./plants/Plants";
 
+/** Users can add plants to a cart and remove them. */
 export default function App() {
   const [cart, setCart] = useState([]);
 
   const addToCart = (plant) => {
-    const itemExists = cart.find((item) => item.id === plant.id);
+    const itemExists = cart.find((i) => i.id === plant.id);
     if (itemExists) {
       setCart(
         cart.map((item) =>
@@ -17,7 +18,8 @@ export default function App() {
         ),
       );
     } else {
-      setCart([...cart, { ...plant, quantity: 1 }]);
+      const item = { ...plant, quantity: 1 };
+      setCart([...cart, item]);
     }
   };
 
@@ -35,8 +37,15 @@ export default function App() {
 
   return (
     <>
-      <PlantList onAddToCart={addToCart} />
-      <Cart cart={cart} onRemoveFromCart={removeFromCart} />
+      <h1>Proper Plants</h1>
+      <main>
+        <Plants plants={PLANTS} addToCart={addToCart} />
+        <Cart
+          cart={cart}
+          removeFromCart={removeFromCart}
+          addToCart={addToCart}
+        />
+      </main>
     </>
   );
 }
